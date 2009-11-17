@@ -1,0 +1,12 @@
+<seats>
+  <seat longname="Plads 1"   shortname="1"  x="47"  y="52" />
+  <seat longname="Plads 2"   shortname="2"  x="79"  y="52" />
+  <seat longname="Plads 3"   shortname="3"  x="111" y="52" />
+  <seat longname="Plads 4"   shortname="4"  x="143" y="52" />
+  <seat longname="Plads 5"   shortname="5"  x="175" y="52" />
+  <seat longname="Plads 6"   shortname="6"  x="47"  y="80" />
+  <seat longname="Plads 7"   shortname="7"  x="79"  y="80" />
+  <seat longname="Plads 8"   shortname="8"  x="112" y="80" />
+  <seat longname="Plads 9"   shortname="9"  x="144" y="80" />
+  <seat longname="Plads 10"  shortname="10" x="175" y="80" />
+</seats>
