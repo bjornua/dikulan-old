@@ -1,4 +1,18 @@
-<?php echo '<?'?>xml version="1.0" encoding="UTF-8"?>
+<?php
+    $menu = array(
+        array('Forside'           , array('controller'=>'index')),
+        array('Information'       , array('controller'=>'information')),
+        array('Madmuligheder'     , array('controller'=>'food-options')),
+        array('Turneringer/events', array('controller'=>'tournaments')),
+        array('Regler'            , array('controller'=>'rules')),
+        array('Pladsreservation'  , array('controller'=>'seat-booking')),
+        array('Galleri'           , array('controller'=>'gallery')),
+        array('Kontakt'           , array('controller'=>'contact')),
+        array('Nyheder'           , array('controller'=>'news')),
+    );
+
+echo '<?xml version="1.0" encoding="UTF-8"?>'
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -16,32 +30,16 @@
             <div id="middle">
                 <div id="middle-content">                    
                     <ul id="menu">
-                        <li class="menu-item"><a href="#">Forside</a></li>
-                        <li class="menu-item"><a href="#">Information</a></li>
-                        <li class="menu-item"><a href="#">Madmuligheder</a></li>
-                        <li class="menu-item"><a href="#">Turneringer/events</a></li>
-                        <li class="menu-item"><a href="#">Regler</a></li>
-                        <li class="menu-item"><a href="#">Pladsreservation</a></li>
-                        <li class="menu-item"><a href="#">Galleri</a></li>
-                        <li class="menu-item"><a href="#">Kontakt</a></li>
-                        <li class="menu-item"><a href="#">Blog</a></li>
+                        <li class="menu-item">
+                        <?php foreach($menu as $item): ?>
+                            <a href="<?php echo $this->url($item[1], null, true)?>">
+                                <?php echo $item[0] ?>
+                            </a>
+                        <?php endforeach; ?>
+                        </li>
                     </ul>
                     <div id="main-content">
-                        <h1>Forside</h1>
-                        <p>
-                            Velkommen til DIKULANs hjemmeside.
-                        </p>
-                        <p>
-                            Her på siden kan du bl.a. finde nyttig information om LANet, arrang&oslash;rerne og du kan reservere en plads, så du kan komme til at sidde ved siden af dine venner.
-                        </p>
-                        <h2>Hurtig introduktion</h2>
-                        <p>
-                            Det n&aelig;ste DIKULAN vil finde sted:
-                            <table>
-                                <tr><td>Starttidspunkt:</td><td>d. 13. november 2009 kl. 16.00</td></tr>
-                                <tr><td>Sluttidspunkt:</td><td>d. 15. november 2009 kl. 16.00</td></tr>
-                            </table>
-                        </p>
+                        <?php echo $this->layout()->content ?>
                     </div>
                 </div>
             </div>
