@@ -90,7 +90,6 @@ body {
 }
 #main-content th {
     font-weight:bold;
-    color: #FFF;
     text-align:center;
 }
 #main-content caption {
@@ -101,6 +100,5 @@ body {
     margin-bottom:1em;
 }
 #main-content a {
-    color: #FFF;
     text-decoration: underline;
 }
