@@ -36,6 +36,25 @@ body {
     width: 150px;
 }
 
+#menu .menu-item {
+    float:left;
+    font: 8pt "Tahoma", sans;
+    font-weight: bold;
+    width: 150px;
+}
+
+#menu .menu-item a {
+    background: url('/images/menu-pil.png') 6px 7px no-repeat;
+    float: left;
+    padding: 4px 0 4px 21px;
+    color: #000;
+    width: 129px;
+    text-decoration: none;
+}
+#menu .menu-item a:hover {
+    background-color: #E4E4E4;
+}
+
 #main-content {
     float: left;
     width: 549px;
