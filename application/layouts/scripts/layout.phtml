@@ -10,6 +10,7 @@
         array('Kontakt'           , array('controller'=>'contact')),
         array('Nyheder'           , array('controller'=>'news')),
     );
+    Zend_Controller_Front::getInstance()->getResponse()->setHeader('Content-type', 'text/html;charset=utf-8');
 
 echo '<?xml version="1.0" encoding="UTF-8"?>'
 ?>
