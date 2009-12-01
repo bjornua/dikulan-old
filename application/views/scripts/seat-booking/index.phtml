@@ -1,1 +1,9 @@
+<?php
+
+$image_url = $this->url(array('controller'=>'seat-booking', 'action'=>'available-seats'), null, true)
+
+?>
 <h1>Plads-reservation</h1>
+<p>
+    <img style="border:1px solid #000" src="<?php echo $image_url?>" />
+</p>

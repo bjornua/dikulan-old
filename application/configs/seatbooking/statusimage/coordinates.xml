@@ -1,0 +1,12 @@
+<seats>
+    <seat id="1"  x="47"  y="52" />
+    <seat id="2"  x="79"  y="52" />
+    <seat id="3"  x="111" y="52" />
+    <seat id="4"  x="143" y="52" />
+    <seat id="5"  x="175" y="52" />
+    <seat id="6"  x="47"  y="80" />
+    <seat id="7"  x="79"  y="80" />
+    <seat id="8"  x="111" y="80" />
+    <seat id="9"  x="143" y="80" />
+    <seat id="10" x="175" y="80" />
+</seats>

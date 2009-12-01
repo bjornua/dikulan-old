@@ -1,0 +1,12 @@
+<seats>
+    <seat id="1"  longname="Plads 1" />
+    <seat id="2"  longname="Plads 2" />
+    <seat id="3"  longname="Plads 3" />
+    <seat id="4"  longname="Plads 4" />
+    <seat id="5"  longname="Plads 5" />
+    <seat id="6"  longname="Plads 6" />
+    <seat id="7"  longname="Plads 7" />
+    <seat id="8"  longname="Plads 8" />
+    <seat id="9"  longname="Plads 9" />
+    <seat id="10" longname="Plads 10" />
+</seats>
