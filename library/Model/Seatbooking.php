@@ -11,9 +11,13 @@
         }
 
         function get_taken_seats_ids(){
-            $sql = "select `id` from `$this->tablename`";
+            $sql = "select `plads_id` from `$this->tablename`";
             $result = $this->db->fetchAll($sql);
-            return $result;
+            $return = array();
+            foreach($result as $row){
+                $return[] = $row['plads_id'];
+            }
+            return $return;
         }
 
         function get_content_checksum(){

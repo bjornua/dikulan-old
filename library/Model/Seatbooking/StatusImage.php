@@ -17,7 +17,7 @@
             $taken_seats_result = $this->seatbooking->get_taken_seats_ids();
             $taken_seats = array();
             foreach($taken_seats_result as $seat)
-                $taken_seats[$seat['id']] = 0;
+                $taken_seats[$seat] = 0;
 
 
             $coord_xml = simplexml_load_file($coord_filename);
