@@ -14,12 +14,8 @@ class SeatBookingController extends Zend_Controller_Action
     }
     public function availableSeatsAction()
     {
-        $db = new Zend_Db_Adapter_Mysqli(array(
-            'host'=>'127.0.0.1',
-            'password'=>null,
-            'username'=>'dikulan',
-            'dbname'=>'dikulan',
-        ));
+        $db = $this->getInvokeArg('bootstrap')->getResource('db');
+
         $tablename = 'plads';
         $config_directory = APPLICATION_PATH . '/configs/seatbooking';
 

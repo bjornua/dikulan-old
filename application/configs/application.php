@@ -7,6 +7,11 @@
     $production['bootstrap']['class'] = 'Bootstrap';
     $production['resources']['frontController']['controllerDirectory'] = APPLICATION_PATH . '/controllers';
     $production['resources']['layout']['layoutPath'] = APPLICATION_PATH . '/layouts/scripts';
+    $production['resources']['db']['adapter'] = 'mysqli';
+    $production['resources']['db']['params']['host'] = '';
+    $production['resources']['db']['params']['username'] = '';
+    $production['resources']['db']['params']['password'] = '';
+    $production['resources']['db']['params']['dbname'] = '';
     
     $development = $production;
     $development['phpSettings']['display_startup_errors'] = 1;
