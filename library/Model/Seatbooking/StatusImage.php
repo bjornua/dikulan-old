@@ -7,6 +7,25 @@
         function __construct(Model_Seatbooking $seatbooking, $cache_directory){
             $this->seatbooking = $seatbooking;
             $this->cache_directory = $cache_directory;
+            $this->xmlconfig_filename = "$seatbooking->config_directory/statusimage/coordinates.xml";
+        }
+
+        function xmlToArray(DOMDocument $doc){
+            $coords = array();
+            foreach($doc->firstChild->childNodes as $node){
+                if($node instanceof DOMElement){
+                    $id = $node->getAttribute('id');
+                    $x  = $node->getAttribute('x' );
+                    $y  = $node->getAttribute('y' );
+                    $coords[$id] = array($x, $y);
+                }
+            }
+            return $coords;
+        }
+        function load_xmlconfig_to_array(){
+            $doc = new DOMDocument();
+            $doc->load($this->xmlconfig_filename);
+            return $this->xmlToArray($doc);
         }
 
         private function generate(){
@@ -19,15 +38,7 @@
             foreach($taken_seats_result as $seat)
                 $taken_seats[$seat] = 0;
 
-
-            $coord_xml = simplexml_load_file($coord_filename);
-            $coords = array();
-            foreach($coord_xml as $coord){
-                $coords[(string)$coord['id']] = array(
-                    (int)$coord['x'],
-                    (int)$coord['y'],
-                );
-            }
+            $coords = $this->load_xmlconfig_to_array();
 
             $taken_seats_coords = array_intersect_key($coords, $taken_seats);
 
