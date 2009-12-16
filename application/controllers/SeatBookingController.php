@@ -16,7 +16,7 @@ class SeatBookingController extends Zend_Controller_Action
     {
         $db = $this->getInvokeArg('bootstrap')->getResource('db');
 
-        $tablename = 'plads';
+        $tablename = 'reservation';
         $config_directory = APPLICATION_PATH . '/configs/seatbooking';
 
         $seatbooking = new Model_Seatbooking($config_directory, $db, $tablename);
