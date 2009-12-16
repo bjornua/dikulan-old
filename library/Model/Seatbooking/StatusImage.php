@@ -6,8 +6,11 @@
         
         function __construct(Model_Seatbooking $seatbooking, $cache_directory){
             $this->seatbooking = $seatbooking;
-            $this->cache_directory = $cache_directory;
-            $this->xmlconfig_filename = "$seatbooking->config_directory/statusimage/coordinates.xml";
+            $this->filename_xmlconfig = "$seatbooking->config_directory/statusimage/coordinates.xml";
+            $this->filename_bg        = "{$this->seatbooking->config_directory}/statusimage/floorplan.png";
+            $this->filename_marker    = "{$this->seatbooking->config_directory}/statusimage/unavailable_marker.png";
+            $this->filename_image     = "{$cache_directory}/seatbook_status_cached.png";
+            $this->filename_meta      = "{$cache_directory}/seatbook_status_cached_meta.txt";
         }
 
         function xmlToArray(DOMDocument $doc){
@@ -24,15 +27,11 @@
         }
         function load_xmlconfig_to_array(){
             $doc = new DOMDocument();
-            $doc->load($this->xmlconfig_filename);
+            $doc->load($this->filename_xmlconfig);
             return $this->xmlToArray($doc);
         }
 
         private function generate(){
-            $bg_filename = $this->seatbooking->config_directory . '/statusimage/floorplan.png';
-            $marker_filename = $this->seatbooking->config_directory . '/statusimage/unavailable_marker.png';
-            $coord_filename = $this->seatbooking->config_directory . '/statusimage/coordinates.xml';
-
             $taken_seats_result = $this->seatbooking->get_taken_seats_ids();
             $taken_seats = array();
             foreach($taken_seats_result as $seat)
@@ -42,8 +41,8 @@
 
             $taken_seats_coords = array_intersect_key($coords, $taken_seats);
 
-            $bg = new imagick($bg_filename);
-            $marker = new imagick($marker_filename);
+            $bg = new imagick($this->filename_bg);
+            $marker = new imagick($this->filename_marker);
 
             $marker_width  = $marker->getImageWidth();
             $marker_height = $marker->getImageHeight();
@@ -58,10 +57,8 @@
         }
 
         private function save(Imagick $image, $checksum){
-            $filename_image = "{$this->cache_directory}/seatbook_status_cached.png";
-            $filename_meta  = "{$this->cache_directory}/seatbook_status_cached_meta.txt";
-            $file_image = fopen($filename_image, 'ab');
-            $file_meta  = fopen($filename_meta , 'ab');
+            $file_image = fopen($this->filename_image, 'ab');
+            $file_meta  = fopen($this->filename_meta , 'ab');
             flock($file_image, LOCK_EX);
             flock($file_meta , LOCK_EX);
             ftruncate($file_image, 0);
@@ -73,28 +70,34 @@
         }
 
         private function load(){
-            $filename_image = "{$this->cache_directory}/seatbook_status_cached.png";
-            $filename_meta  = "{$this->cache_directory}/seatbook_status_cached_meta.txt";
-            $file_image     = fopen($filename_image, 'rb');
-            $file_meta      = fopen($filename_meta , 'rb');
+            $file_image     = fopen($this->filename_image, 'rb');
+            $file_meta      = fopen($this->filename_meta , 'rb');
             flock($file_image, LOCK_SH);
-            flock($file_meta, LOCK_SH);
+            flock($file_meta , LOCK_SH);
             return array($file_image, $file_meta);
         }
 
         public function get(){
-            list($file_image, $file_checksum) = $this->load();
-            $current_checksum = $this->seatbooking->get_content_checksum();
-            $cached_checksum = stream_get_contents($file_checksum);
+            $file_exists_image = file_exists($this->filename_image);
+            $file_exists_meta  = file_exists($this->filename_meta );
 
-            if($current_checksum != $cached_checksum){
-                fclose($file_image);
-                fclose($file_checksum);
-                $this->save($this->generate(), $current_checksum);
-                return $this->get();
+            if(!$file_exists_image || !$file_exists_meta){
+                touch($this->filename_image);
+                touch($this->filename_meta);
             }
-            return $file_image;
-            
+            while(true){
+                list($file_image, $file_meta) = $this->load();
+                $checksum_current = (string)$this->seatbooking->get_content_checksum();
+                $checksum_cache   = (string)stream_get_contents($file_meta);
+                $cache_needs_update = $checksum_current !== $checksum_cache;
+                if($cache_needs_update){
+                    fclose($file_image);
+                    fclose($file_meta);
+                    $this->save($this->generate(), $checksum_current);
+                    continue;
+                }
+                return $file_image;
+            }
         }
 
     }
