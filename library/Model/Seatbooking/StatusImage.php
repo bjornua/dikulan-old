@@ -57,28 +57,43 @@
             return $bg;
         }
 
-        private function save($image, $checksum){
-            $image_filename = $this->cache_directory .'/seatbook_status_cached.png';
-            $image_meta_filename = $this->cache_directory .'/seatbook_status_cached_meta.txt';
-            
-            file_put_contents($image_filename, (string)$image);
-            file_put_contents($image_meta_filename, $checksum);
+        private function save(Imagick $image, $checksum){
+            $filename_image = "{$this->cache_directory}/seatbook_status_cached.png";
+            $filename_meta  = "{$this->cache_directory}/seatbook_status_cached_meta.txt";
+            $file_image = fopen($filename_image, 'ab');
+            $file_meta  = fopen($filename_meta , 'ab');
+            flock($file_image, LOCK_EX);
+            flock($file_meta , LOCK_EX);
+            ftruncate($file_image, 0);
+            ftruncate($file_meta , 0);
+            fwrite($file_image, (string)$image   );
+            fwrite($file_meta ,         $checksum);
+            fclose($file_image);
+            fclose($file_meta );
         }
 
         private function load(){
-            $image_filename = $this->cache_directory .'/seatbook_status_cached.png';
-            return fopen($image_filename,'r');
+            $filename_image = "{$this->cache_directory}/seatbook_status_cached.png";
+            $filename_meta  = "{$this->cache_directory}/seatbook_status_cached_meta.txt";
+            $file_image     = fopen($filename_image, 'rb');
+            $file_meta      = fopen($filename_meta , 'rb');
+            flock($file_image, LOCK_SH);
+            flock($file_meta, LOCK_SH);
+            return array($file_image, $file_meta);
         }
 
         public function get(){
-            $image_meta_filename = $this->cache_directory .'/seatbook_status_cached_meta.txt';
-            $checksum = file_get_contents($image_meta_filename);
+            list($file_image, $file_checksum) = $this->load();
             $current_checksum = $this->seatbooking->get_content_checksum();
+            $cached_checksum = stream_get_contents($file_checksum);
 
-            if($current_checksum != $checksum)
+            if($current_checksum != $cached_checksum){
+                fclose($file_image);
+                fclose($file_checksum);
                 $this->save($this->generate(), $current_checksum);
-            
-            return $this->load();
+                return $this->get();
+            }
+            return $file_image;
             
         }
 
