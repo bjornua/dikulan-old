@@ -42,16 +42,16 @@
 
             $taken_seats_coords = array_intersect_key($coords, $taken_seats);
 
-            $bg = imagecreatefrompng($bg_filename);
-            $marker = imagecreatefrompng($marker_filename);
+            $bg = new imagick($bg_filename);
+            $marker = new imagick($marker_filename);
 
-            $marker_width  = imagesx($marker);
-            $marker_height = imagesy($marker);
+            $marker_width  = $marker->getImageWidth();
+            $marker_height = $marker->getImageHeight();
             
             foreach($taken_seats_coords as $seat){
                 $x = $seat[0] - floor($marker_width / 2);
                 $y = $seat[1] - floor($marker_width / 2);
-                imagecopy($bg, $marker, $x, $y, 0, 0, $marker_width, $marker_height);
+                $bg->compositeImage($marker, imagick::COMPOSITE_OVER, $x, $y);
             }
 
             return $bg;
@@ -61,7 +61,7 @@
             $image_filename = $this->cache_directory .'/seatbook_status_cached.png';
             $image_meta_filename = $this->cache_directory .'/seatbook_status_cached_meta.txt';
             
-            imagepng($image, $image_filename, 9);
+            file_put_contents($image_filename, (string)$image);
             file_put_contents($image_meta_filename, $checksum);
         }
 
